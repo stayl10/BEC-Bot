@@ -89,7 +89,7 @@ async def set_game_week_channel(
     save_config(config)
 
     await interaction.followup.send(f"Setting game week channel to {channel_for_threads.mention}")
-
+    logger.debug(f"setting game week channel to {channel_for_threads.mention}")
 
 
 @bot.tree.command(
@@ -116,24 +116,25 @@ async def create_game_thread(
 
     channel_for_thread = bot.get_channel(channel_id)
 
-    print(f"Creating thread week {week_number} | {home_team} vs {away_team}")
+    print(f"Creating thread Week {week_number} | {home_team} vs {away_team}")
     #await interaction.response.send_message(f"I will make a thread in {channel_for_thread} with the home team {home_team} and away team {away_team} for week number {week_number}.")
     game_Thread = await channel_for_thread.create_thread(
         type=None, #private thread
         name = f"{home_team} vs {away_team} | Week {week_number}",
         #auto_archive_duration=(game_chat_duration * 24 * 60),
-        reason=f"Game Created for week {week_number} | {home_team} vs {away_team} | {channel_for_thread.name}",
+        reason=f"Game Created for Week {week_number} | {home_team} vs {away_team} | {channel_for_thread.name}",
         invitable=True,
 
     )
 
     await game_Thread.send(
-        f"Game thread created for week {week_number} | {home_team.mention} vs {away_team.mention}"
+        f"Game thread created for Week {week_number} | {home_team.mention} vs {away_team.mention}"
     )
 
     await interaction.followup.send(f"thread created for week {week_number} | {home_team} vs {away_team}", ephemeral=True)
 
     print("thread created")
+    logger.debug(f"thread created for Week {week_number} | {home_team.mention} vs {away_team.mention}")
 
 
 
