@@ -120,7 +120,7 @@ async def create_game_thread(
     #await interaction.response.send_message(f"I will make a thread in {channel_for_thread} with the home team {home_team} and away team {away_team} for week number {week_number}.")
     game_Thread = await channel_for_thread.create_thread(
         type=None, #private thread
-        name = f"{home_team} vs {away_team} | Week {week_number}",
+        name = f"Week {week_number} | {home_team} vs {away_team}",
         #auto_archive_duration=(game_chat_duration * 24 * 60),
         reason=f"Game Created for Week {week_number} | {home_team} vs {away_team} | {channel_for_thread.name}",
         invitable=True,
