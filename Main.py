@@ -3,11 +3,10 @@ from discord import app_commands
 from pathlib import Path
 from discord.ext import commands
 from dotenv import load_dotenv
-import logging
 import sys
 import os
 
-import json
+from utils import *
 
 
 
@@ -18,18 +17,6 @@ perms_int = 5066929685473296
 
 game_chat_duration = 9 #in days
 game_team_role = 123
-
-CFG_FILE = "config.json"
-
-def load_config():
-    with open(CFG_FILE, "r") as f:
-        return json.load(f)
-
-
-def save_config(data):
-    with open(CFG_FILE, "w") as f:
-        json.dump(data, f, indent=4)
-
 
 
 #=========================
@@ -56,9 +43,6 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 tree = bot.tree
 
-logging.basicConfig(filename='createdChannels.log', encoding='utf-8', level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
-logger = logging.getLogger(__name__)
-
 @bot.event
 async def on_ready():
     print(f"Bot is online as {bot.user}")
@@ -84,9 +68,10 @@ async def set_game_week_channel(
     await interaction.response.defer(ephemeral=True, thinking=True)
     print(f"setting game week channel to {channel_for_threads}")
 
-    config = load_config()
-    config["channel_id"] = channel_for_threads.id
-    save_config(config)
+    config = load_config(interaction.guild.id)
+    config["guild_name"] = interaction.guild.name
+    config["ticketChannelID"] = channel_for_threads.id
+    save_config(interaction.guild.id, config)
 
     await interaction.followup.send(f"Setting game week channel to {channel_for_threads.mention}")
     logger.debug(f"setting game week channel to {channel_for_threads.mention}")
